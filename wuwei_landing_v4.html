@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wu Wei</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,700;1,300;1,700&family=Jost:wght@200;300;400;500;700;900&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --cream-0:   #FDFAF4;
+  --cream-1:   #F5F0E4;
+  --cream-2:   #EAE2CE;
+  --cream-3:   #D4C9A8;
+  --warm-mid:  #9E9070;
+  --warm-dark: #4A4435;
+  --warm-black:#1C1A14;
+  --green:     #3D6B4F;
+  --green-mid: #5A8F6A;
+  --green-soft:#C8DDD0;
+  --blue:      #2E5C8A;
+  --blue-mid:  #4A7FB5;
+  --warn:      #C17F3A;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--warm-black);
+  color: var(--cream-0);
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+}
+
+/* ── PROGRESS ── */
+.progress-bar {
+  position: fixed; top: 0; left: 0;
+  height: 2px; background: var(--green-mid);
+  z-index: 999; transition: width .1s;
+  width: 0%;
+}
+
+/* ── NAV DOTS ── */
+.nav-dots {
+  position: fixed; right: 20px; top: 50%;
+  transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: 10px;
+  z-index: 100;
+}
+.nd {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: rgba(255,255,255,.2);
+  cursor: pointer; transition: all .3s;
+  border: none;
+}
+.nd.on { background: var(--green-mid); transform: scale(1.5); }
+
+/* ── PANELS ── */
+.panel {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+  padding: 60px 32px;
+}
+
+/* ═══════════════════════════════
+   PANEL 1 — ARRECHO NUNCA MUERE
+   Mosaico de fundo
+═══════════════════════════════ */
+.p1 { background: var(--warm-black); padding: 0; }
+
+/* MOSAIC GRID — substitui por imagens reais depois */
+.mosaic {
+  position: absolute; inset: 0;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 3px;
+  opacity: .22;
+  filter: saturate(.4) brightness(.6);
+}
+
+/* Cada célula do mosaico terá uma imagem.
+   Por agora são blocos de cor que simulam fotos.
+   Para adicionar fotos reais: substitui background por url('foto.jpg') center/cover */
+.mosaic-cell {
+  background: var(--warm-dark);
+  transition: opacity .3s;
+}
+/* Variações de tom para parecer mosaico de fotos */
+.mosaic-cell:nth-child(1)  { background: #2a3d2e; }
+.mosaic-cell:nth-child(2)  { background: #1e2d3f; }
+.mosaic-cell:nth-child(3)  { background: #3a2e1e; }
+.mosaic-cell:nth-child(4)  { background: #2d3a28; }
+.mosaic-cell:nth-child(5)  { background: #1a2535; }
+.mosaic-cell:nth-child(6)  { background: #362a1c; }
+.mosaic-cell:nth-child(7)  { background: #1e3528; }
+.mosaic-cell:nth-child(8)  { background: #3d2e1a; }
+.mosaic-cell:nth-child(9)  { background: #22354a; }
+.mosaic-cell:nth-child(10) { background: #2e4030; }
+.mosaic-cell:nth-child(11) { background: #1c2a1e; }
+.mosaic-cell:nth-child(12) { background: #3a3020; }
+.mosaic-cell:nth-child(13) { background: #243d2e; }
+.mosaic-cell:nth-child(14) { background: #1a3040; }
+.mosaic-cell:nth-child(15) { background: #382e1e; }
+.mosaic-cell:nth-child(16) { background: #1e2d24; }
+.mosaic-cell:nth-child(17) { background: #2e3a4a; }
+.mosaic-cell:nth-child(18) { background: #3a2a18; }
+.mosaic-cell:nth-child(19) { background: #2a3e30; }
+.mosaic-cell:nth-child(20) { background: #182438; }
+.mosaic-cell:nth-child(21) { background: #362a1a; }
+.mosaic-cell:nth-child(22) { background: #1e3230; }
+.mosaic-cell:nth-child(23) { background: #3c2e22; }
+.mosaic-cell:nth-child(24) { background: #243a4c; }
+
+/* Dark overlay sobre o mosaico */
+.mosaic-overlay {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 50%, rgba(28,26,20,.55) 0%, rgba(28,26,20,.85) 100%);
+  z-index: 1;
+}
+
+.p1-content {
+  position: relative; z-index: 2;
+  text-align: center;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  min-height: 100vh; padding: 60px 32px;
+}
+
+.p1-headline {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  font-size: clamp(72px, 15vw, 200px);
+  line-height: .88;
+  letter-spacing: -3px;
+  text-transform: uppercase;
+  user-select: none;
+}
+
+.p1-headline .w1 {
+  display: block; color: var(--cream-0);
+  opacity: 0; animation: fadeUp .9s .3s forwards;
+}
+.p1-headline .w2 {
+  display: block;
+  font-style: italic; font-weight: 300;
+  color: var(--green-mid);
+  font-size: .6em; letter-spacing: 4px;
+  text-transform: lowercase;
+  opacity: 0; animation: fadeUp .8s .6s forwards;
+}
+.p1-headline .w3 {
+  display: block; color: var(--cream-0);
+  opacity: 0; animation: fadeUp .9s .9s forwards;
+}
+
+.p1-scroll {
+  position: absolute; bottom: 32px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  opacity: 0; animation: fadeUp .6s 1.6s forwards;
+  z-index: 2; cursor: pointer;
+}
+.p1-scroll-line {
+  width: 1px; height: 44px;
+  background: linear-gradient(to bottom, transparent, rgba(255,255,255,.35));
+  animation: pulse 2s 2s infinite;
+}
+.p1-scroll-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 8px; letter-spacing: 3px;
+  text-transform: uppercase; color: rgba(255,255,255,.35);
+}
+
+@keyframes pulse {
+  0%,100% { opacity:.4; } 50% { opacity:1; }
+}
+
+/* ═══════════════════════════════
+   PANEL 2 — Y SI MUERE, MUERE ARRECHO
+═══════════════════════════════ */
+.p2 {
+  background: var(--cream-0);
+  align-items: flex-start; justify-content: center;
+  padding: 80px 10vw;
+}
+
+.p2-pre {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--warm-mid);
+  margin-bottom: 24px;
+}
+
+.p2-headline {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(44px, 9vw, 120px);
+  font-weight: 300; line-height: .92;
+  color: var(--warm-dark); letter-spacing: -1px;
+}
+
+.p2-headline .line2 {
+  display: block;
+  padding-left: clamp(40px, 8vw, 140px);
+  font-style: italic; color: var(--green);
+}
+
+.p2-quote {
+  margin-top: 48px;
+  max-width: 480px;
+  padding-left: 20px;
+  border-left: 2px solid var(--green-soft);
+  font-size: 16px; font-weight: 300;
+  color: var(--warm-mid); line-height: 1.85;
+}
+.p2-quote strong { color: var(--warm-dark); font-weight: 500; }
+
+/* ═══════════════════════════════
+   PANEL 3 — INTRODUCCION
+═══════════════════════════════ */
+.p3 { background: var(--warm-black); padding: 80px 10vw; align-items: flex-start; }
+
+.p3-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--warm-mid);
+  margin-bottom: 20px;
+}
+
+.p3-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(36px, 6vw, 80px);
+  font-weight: 300; line-height: 1.05;
+  color: var(--cream-0); margin-bottom: 36px;
+}
+.p3-title em { font-style: italic; color: var(--green-mid); }
+
+.p3-text {
+  font-size: 16px; font-weight: 300;
+  color: rgba(255,255,255,.55); line-height: 1.9;
+  max-width: 580px; margin-bottom: 20px;
+}
+.p3-text strong { color: var(--cream-1); font-weight: 400; }
+
+.p3-origin {
+  display: inline-flex; align-items: center; gap: 10px;
+  margin-top: 16px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--warm-mid);
+}
+.p3-origin-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green-mid); }
+
+/* ═══════════════════════════════
+   PANEL 4 — HERRAMIENTAS
+═══════════════════════════════ */
+.p4 { background: var(--cream-1); padding: 80px 10vw; justify-content: center; }
+
+.p4-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--warm-mid);
+  margin-bottom: 16px; align-self: flex-start; width: 100%;
+}
+
+.p4-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(32px, 5vw, 60px);
+  font-weight: 300; line-height: 1.1;
+  color: var(--warm-black); margin-bottom: 48px;
+  align-self: flex-start;
+}
+.p4-title em { font-style: italic; color: var(--green); }
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  width: 100%; max-width: 960px;
+}
+
+.tool-card {
+  background: var(--cream-0);
+  border: 1px solid var(--cream-2);
+  border-radius: 20px;
+  padding: 36px 32px;
+  cursor: pointer;
+  transition: all .3s;
+  display: flex; flex-direction: column;
+  position: relative; overflow: hidden;
+  text-decoration: none; color: inherit;
+}
+
+.tool-card::before {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 3px;
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .35s;
+}
+
+.tool-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,.1); }
+.tool-card:hover::before { transform: scaleX(1); }
+
+.tool-card.nutri::before  { background: var(--green); }
+.tool-card.fluxo::before  { background: var(--blue); }
+.tool-card.ritmo::before  { background: var(--warn); }
+.tool-card.viagem::before { background: #8B5E8A; }
+
+.tool-icon {
+  font-size: 36px; margin-bottom: 20px;
+  width: 60px; height: 60px;
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.tool-card.nutri  .tool-icon { background: rgba(61,107,79,.12); }
+.tool-card.fluxo  .tool-icon { background: rgba(46,92,138,.1); }
+.tool-card.ritmo  .tool-icon { background: rgba(193,127,58,.12); }
+.tool-card.viagem .tool-icon { background: rgba(139,94,138,.1); }
+
+.tool-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px; font-weight: 300;
+  color: var(--warm-black); margin-bottom: 8px;
+  font-style: italic;
+}
+
+.tool-sub {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px; letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.tool-card.nutri  .tool-sub { color: var(--green); }
+.tool-card.fluxo  .tool-sub { color: var(--blue); }
+.tool-card.ritmo  .tool-sub { color: var(--warn); }
+.tool-card.viagem .tool-sub { color: #8B5E8A; }
+
+.tool-desc {
+  font-size: 13px; font-weight: 300;
+  color: var(--warm-mid); line-height: 1.7;
+  flex: 1;
+}
+
+.tool-arrow {
+  margin-top: 24px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: 1px;
+  color: var(--warm-mid);
+  display: flex; align-items: center; gap: 8px;
+  transition: gap .2s;
+}
+.tool-card:hover .tool-arrow { gap: 14px; }
+
+.tool-status {
+  position: absolute; top: 24px; right: 24px;
+  font-family: 'DM Mono', monospace;
+  font-size: 8px; letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 3px 8px; border-radius: 100px;
+}
+.status-live { background: rgba(61,107,79,.12); color: var(--green); }
+.status-soon { background: var(--cream-2); color: var(--warm-mid); }
+
+/* ═══════════════════════════════
+   PANEL 5 — FRASE FINAL
+═══════════════════════════════ */
+.p5 { background: var(--warm-black); text-align: center; padding: 80px 32px; }
+
+.p5-glow {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 50% at 50% 60%, rgba(61,107,79,.1) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.p5-content { position: relative; z-index: 1; max-width: 700px; }
+
+.p5-quote {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(22px, 4vw, 44px);
+  font-weight: 300; line-height: 1.5;
+  color: var(--cream-0); margin-bottom: 40px;
+}
+.p5-quote em { font-style: italic; color: var(--green-mid); }
+
+.p5-divider {
+  width: 40px; height: 1px;
+  background: var(--green-mid);
+  margin: 0 auto 28px;
+}
+
+.p5-author {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px; font-weight: 300;
+  font-style: italic;
+  color: var(--cream-3); margin-bottom: 8px;
+}
+
+.p5-meta {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px; letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--warm-mid);
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.reveal {
+  opacity: 0; transform: translateY(28px);
+  transition: opacity .75s ease, transform .75s ease;
+}
+.reveal.on { opacity: 1; transform: translateY(0); }
+.d1 { transition-delay: .1s; }
+.d2 { transition-delay: .22s; }
+.d3 { transition-delay: .34s; }
+.d4 { transition-delay: .46s; }
+.d5 { transition-delay: .58s; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .tools-grid { grid-template-columns: 1fr; }
+  .p2, .p3, .p4 { padding: 60px 24px; }
+  .nav-dots { display: none; }
+  .p1-headline { letter-spacing: -1px; }
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="prog"></div>
+
+<nav class="nav-dots" id="dots">
+  <button class="nd on" onclick="goTo(0)"></button>
+  <button class="nd" onclick="goTo(1)"></button>
+  <button class="nd" onclick="goTo(2)"></button>
+  <button class="nd" onclick="goTo(3)"></button>
+  <button class="nd" onclick="goTo(4)"></button>
+</nav>
+
+<!-- ══ 1 — ARRECHO NUNCA MUERE ══ -->
+<div class="panel p1" id="s0">
+
+  <!-- MOSAICO — substitui cada .mosaic-cell por <div style="background:url('foto.jpg') center/cover"> -->
+  <div class="mosaic" id="mosaic">
+    <!-- 24 células = 6 colunas × 4 linhas -->
+    <!-- Para adicionar fotos: <div class="mosaic-cell" style="background:url('tuafoto.jpg') center/cover no-repeat"></div> -->
+    <div class="mosaic-cell"></div><div class="mosaic-cell"></div>
+    <div class="mosaic-cell"></div><div class="mosaic-cell"></div>
+    <div class="mosaic-cell"></div><div class="mosaic-cell"></div>
+    <div class="mosaic-cell"></div><div class="mosaic-cell"></div>
+    <div class="mosaic-cell"></div><div class="mosaic-cell"></div>
+    <div class="mosaic-cell"></div><div class="mosaic-cell"></div>
+    <div class="mosaic-cell"></div><div class="mosaic-cell"></div>
+    <div class="mosaic-cell"></div><div class="mosaic-cell"></div>
+    <div class="mosaic-cell"></div><div class="mosaic-cell"></div>
+    <div class="mosaic-cell"></div><div class="mosaic-cell"></div>
+    <div class="mosaic-cell"></div><div class="mosaic-cell"></div>
+    <div class="mosaic-cell"></div><div class="mosaic-cell"></div>
+  </div>
+  <div class="mosaic-overlay"></div>
+
+  <div class="p1-content">
+    <h1 class="p1-headline">
+      <span class="w1">Arrecho</span>
+      <span class="w2">nunca</span>
+      <span class="w3">muere.</span>
+    </h1>
+  </div>
+
+  <div class="p1-scroll" onclick="goTo(1)">
+    <div class="p1-scroll-line"></div>
+    <div class="p1-scroll-label">scroll</div>
+  </div>
+</div>
+
+<!-- ══ 2 — Y SI MUERE, MUERE ARRECHO ══ -->
+<div class="panel p2" id="s1">
+  <div class="p2-pre reveal">Y si muere...</div>
+  <h2 class="p2-headline reveal d1">
+    muere
+    <span class="line2">arrecho.</span>
+  </h2>
+  <p class="p2-quote reveal d2">
+    Bienvenidos a este proyecto que nació en una oficina en Lisboa y de una suscripción de 22€ de Claude.
+  </p>
+</div>
+
+<!-- ══ 3 — BIENVENIDA ══ -->
+<div class="panel p3" id="s2">
+  <h2 class="p3-title reveal" style="margin-bottom:32px">
+    Bienvenidos a<br><em>Wu Wei</em>
+  </h2>
+  <p class="p3-text reveal d1">
+    Lastimosamente no todos nacimos en cuna de oro, y ni somos influencers — pero mejor así, la vida es más divertida.
+  </p>
+  <p class="p3-text reveal d2">
+    Así que hasta que logres ser millonario y salir de la rutina, te dejo estas herramientas que pienso que te pueden facilitar el día a día.
+  </p>
+  <div class="p3-origin reveal d3">
+    <div class="p3-origin-dot"></div>
+    Lisboa, 2026 · Hecho con garra
+  </div>
+</div>
+
+<!-- ══ 4 — HERRAMIENTAS ══ -->
+<div class="panel p4" id="s3">
+  <div class="p4-label reveal">Las herramientas</div>
+  <h2 class="p4-title reveal d1">Para <em>facilitar</em><br>tu vida entera</h2>
+
+  <div class="tools-grid">
+
+    <div class="tool-card nutri reveal d1" onclick="window.location.href='wuwei_nutri_web.html'">
+      <span class="tool-status status-live">Live</span>
+      <div class="tool-icon">🥗</div>
+      <div class="tool-name">Nutri</div>
+      <div class="tool-sub">Nutrición · Cuerpo</div>
+      <div class="tool-desc">Planificación semanal, seguimiento de macros, recetas reales. Tu cuerpo, tu control.</div>
+      <div class="tool-arrow">Entrar →</div>
+    </div>
+
+    <div class="tool-card fluxo reveal d2" onclick="window.location.href='wuwei_fluxo.html'">
+      <span class="tool-status status-live">Live</span>
+      <div class="tool-icon">💸</div>
+      <div class="tool-name">Fluxo</div>
+      <div class="tool-sub">Finanzas · Dinero</div>
+      <div class="tool-desc">Control de gastos, ahorro, objetivos financieros. Dinero que fluye sin ansiedad.</div>
+      <div class="tool-arrow">Entrar →</div>
+    </div>
+
+    <div class="tool-card ritmo reveal d3" onclick="alert('Wu Wei Ritmo — próximamente')">
+      <span class="tool-status status-soon">Pronto</span>
+      <div class="tool-icon">🔁</div>
+      <div class="tool-name">Ritmo</div>
+      <div class="tool-sub">Hábitos · Constancia</div>
+      <div class="tool-desc">Hábitos diarios, rutinas, consistencia. Pequeños actos que se vuelven inevitables.</div>
+      <div class="tool-arrow">Próximamente →</div>
+    </div>
+
+    <div class="tool-card viagem reveal d4" onclick="alert('Wu Wei Viagem — próximamente')">
+      <span class="tool-status status-soon">Pronto</span>
+      <div class="tool-icon">✈️</div>
+      <div class="tool-name">Viagem</div>
+      <div class="tool-sub">Viajes · Mundo</div>
+      <div class="tool-desc">Planifica tus viajes, presupuestos, destinos. Para los que también quieren ver el mundo.</div>
+      <div class="tool-arrow">Próximamente →</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ 5 — FRASE FINAL ══ -->
+<div class="panel p5" id="s4">
+  <div class="p5-glow"></div>
+  <div class="p5-content">
+    <p class="p5-quote reveal">
+      "No vine a este mundo a vivir<br>
+      en el <em>piloto automático.</em><br>
+      Vine a construir algo<br>
+      que valga la <em>pena.</em>"
+    </p>
+    <div class="p5-divider reveal d1"></div>
+    <div class="p5-author reveal d2">Homero Vásquez</div>
+    <div class="p5-meta reveal d3">Ecuador · Lisboa · Wu Wei · 2026</div>
+  </div>
+</div>
+
+<script>
+const sections = document.querySelectorAll('.panel');
+const dots = document.querySelectorAll('.nd');
+const prog = document.getElementById('prog');
+
+function goTo(i) {
+  sections[i].scrollIntoView({ behavior: 'smooth' });
+}
+
+// Progress + dots + reveals
+window.addEventListener('scroll', () => {
+  // Progress bar
+  const scrolled = window.scrollY;
+  const total = document.body.scrollHeight - window.innerHeight;
+  prog.style.width = (scrolled / total * 100) + '%';
+
+  // Active dot
+  let active = 0;
+  sections.forEach((s, i) => {
+    if (s.getBoundingClientRect().top <= window.innerHeight * .5) active = i;
+  });
+  dots.forEach((d, i) => d.classList.toggle('on', i === active));
+
+  // Reveals
+  document.querySelectorAll('.reveal:not(.on)').forEach(el => {
+    if (el.getBoundingClientRect().top < window.innerHeight * .88)
+      el.classList.add('on');
+  });
+});
+
+// Keyboard
+document.addEventListener('keydown', e => {
+  let cur = 0;
+  sections.forEach((s,i)=>{ if(s.getBoundingClientRect().top <= 80) cur=i; });
+  if (e.key==='ArrowDown' && cur < sections.length-1) goTo(cur+1);
+  if (e.key==='ArrowUp'   && cur > 0)                goTo(cur-1);
+});
+
+setTimeout(()=>window.dispatchEvent(new Event('scroll')), 150);
+</script>
+</body>
+</html>
